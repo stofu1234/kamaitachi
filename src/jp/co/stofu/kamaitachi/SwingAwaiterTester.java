@@ -45,7 +45,7 @@ public class SwingAwaiterTester extends JFrame {
 		try {
 			wait();
 		} catch (InterruptedException e) {
-			System.out.println("返事がない。ただの屍のようだ");
+			System.out.println("殺してでも奪い取る");
 		}
 	}
 
@@ -69,7 +69,7 @@ public class SwingAwaiterTester extends JFrame {
 		try {
 			Thread.sleep(millsec);
 		} catch (InterruptedException e) {
-			System.out.println("返事がない。ただの屍のようだ");
+			System.out.println("殺してでも奪い取る");
 		}
 	}
 
