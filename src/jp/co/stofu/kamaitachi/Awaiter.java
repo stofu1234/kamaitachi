@@ -13,7 +13,9 @@ public class Awaiter {
 	LinkedBlockingQueue<Runnable> waitingTaskQueue = new LinkedBlockingQueue<Runnable>();
 	Function<Exception, Void> errorHandler = null;
 	private boolean isDispatchThread = true;
-	private Thread dispatchThread = null;
+	//private Thread dispatchThread = null;
+	ExecutorService executor = null;
+	ExecutorService dispatchExecutor = null;
 
 	public <T, R> BlockingQueue<R> await(Callable<T> heavyWorkTask,
 			Function<T, R> afterHeavyWorkTask) {
@@ -24,11 +26,15 @@ public class Awaiter {
 	public <T, R> BlockingQueue<R> await(Callable<T> heavyWorkTask,
 			Function<T, R> afterHeavyWorkTask,
 			Function<Exception, Void> errorHandler) {
-		ExecutorService executor = Executors.newSingleThreadExecutor();
+		// ExecutorService executor = Executors.newSingleThreadExecutor();
+		if (executor == null) {
+			executor = Executors.newCachedThreadPool();
+		}
 		LinkedBlockingQueue<R> resultQueue = new LinkedBlockingQueue<R>();
 		// lambda式のタスクの中
 		// 1. heavyWorkTaskを実行し、型TのheavyWorkResultを受け取る
-		// 2. afterHeavyWorkTaskをheavyWorkResultとresultQueueを引数にカリー化でwaitingTaskにする
+		// 2.
+		// afterHeavyWorkTaskをheavyWorkResultとresultQueueを引数にカリー化でwaitingTaskにする
 		// 3. heavyWorkResultをresultQueueにaddする
 		// 4. waitingTaskをwaitingTaskQueueにaddする
 		executor.submit(() -> {
@@ -61,7 +67,11 @@ public class Awaiter {
 	public <T> void awaitVoid(Callable<T> heavyWorkTask,
 			Consumer<T> afterHeavyWorkTask,
 			Function<Exception, Void> errorHandler) {
-		ExecutorService executor = Executors.newSingleThreadExecutor();
+		// ExecutorService executor = Executors.newSingleThreadExecutor();
+		if (executor == null) {
+			executor = Executors.newCachedThreadPool();
+		}
+
 		// lambda式のタスクの中
 		// 1. heavyWorkTaskを実行し、型TのheavyWorkResultを受け取る
 		// 2.
@@ -95,7 +105,11 @@ public class Awaiter {
 	}
 
 	public void dispatchAsync() {
-		dispatchThread = new Thread(() -> {
+		if(dispatchExecutor==null){
+			dispatchExecutor=Executors.newWorkStealingPool();
+		}
+
+		dispatchExecutor.execute(() -> {
 			Runnable task = null;
 			try {
 				while (isDispatchThread) {
@@ -106,7 +120,7 @@ public class Awaiter {
 
 			}
 		});
-		dispatchThread.start();
+
 	}
 
 	public void stopDispatchThread() {
