@@ -185,18 +185,25 @@ public class SwingAwaiterTester extends JFrame {
 
 	public static void main(String[] args) {
 		System.out.println("main start!");
-		SwingAwaiterTester frame = new SwingAwaiterTester();
+		SwingAwaiterTester tester = new SwingAwaiterTester();
 
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setBounds(10, 10, 250, 100);
-		frame.setTitle("Dummy Window");
-		frame.setVisible(true);
+		tester.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		tester.setBounds(10, 10, 250, 100);
+		tester.setTitle("Dummy Window");
+		tester.setVisible(true);
 
 
 		System.out.println("synchronous stack test start!");
-		frame.runSynchrounousStackTest();
+		tester.runSynchrounousStackTest();
+
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 		System.out.println("asynchronous stackless test start!");
-		frame.runASynchrounousStacklessTest();
+		tester.runASynchrounousStacklessTest();
 
 		System.out.println("main end!");
 	}
