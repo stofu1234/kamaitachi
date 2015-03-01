@@ -13,7 +13,6 @@ public class Awaiter {
 	LinkedBlockingQueue<Runnable> waitingTaskQueue = new LinkedBlockingQueue<Runnable>();
 	Function<Exception, Void> errorHandler = null;
 	private boolean isDispatchThread = true;
-	//private Thread dispatchThread = null;
 	ExecutorService executor = null;
 	ExecutorService dispatchExecutor = null;
 
