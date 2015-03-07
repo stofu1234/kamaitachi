@@ -13,7 +13,7 @@ public class LikeWebApplicationTester {
 	BlockingQueue<Integer> AccessTheWebAsync() {
 		HttpClient client = new HttpClient();
 		return awaiter.await(
-				() -> client.GetStringAsync("http://msdn.microsoft.com"),
+				() -> client.GetStringAsync("http://www.hogecrosoft.com"),
 				urlContents -> {
 					return urlContents.length();
 				});
@@ -27,8 +27,6 @@ public class LikeWebApplicationTester {
 				}
 				);
 	}
-
-
 
 	public static void main(String[] args) {
 		LikeWebApplicationTester tester=new LikeWebApplicationTester();
